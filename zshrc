@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export HOME=/home/ty-l8
+export HOME=/home/home-dir
 export ZSH=$HOME/.oh-my-zsh
 
 # path for python
@@ -216,10 +216,9 @@ hash -d C="$HOME/CLanguage"
 hash -d CPP="$HOME/C++"
 hash -d L="$HOME/lisp"
 hash -d P="$HOME/python"
-hash -d PP='/usr/lib/python3.5/site-packages'
 hash -d M="$HOME/mariaDB"
 hash -d H="$HOME/html"
-hash -d B="$HOME/bash_lty"
+hash -d S="$HOME/shell"
 #}}}
 
 
