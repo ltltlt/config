@@ -134,7 +134,7 @@ setopt NO_BEEP
 #自动补全功能 {{{
 setopt AUTO_LIST
 setopt AUTO_MENU
-
+unsetopt correct_all
 
 #自动补全选项
 #zstyle ':completion:*' verbose yes
@@ -333,6 +333,36 @@ setopt bang_hist                # !keyword
 bindkey '^R' history-incremental-search-backward
 
 
+##在命令前插入 sudo {{{
+##定义功能
+sudo-command-line() {
+	[[ -z $BUFFER  ]] && zle up-history
+	[[ $BUFFER != sudo\ *  ]] && BUFFER="sudo $BUFFER"
+	zle end-of-line #光标移动到行末
+}
+zle -N sudo-command-line
+#定义快捷键为： [Esc] [Esc]
+bindkey "\e\e" sudo-command-line
+##}}}
+
+
+#colors: black blue cyan green magenta red white yellow
+INS_color=magenta
+NOR_color=black
+vim_ins_mode="%{$fg_bold[$INS_color]%}[I]%{$reset_color%}"
+vim_cmd_mode="%{$fg_bold[$NOR_color]%}[N]%{$reset_color%}"
+vim_mode=$vim_ins_mode
+
+function zle-keymap-select {
+	vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+	zle reset-prompt
+}
+zle -N zle-keymap-select
+function zle-line-finish {
+	vim_mode=$vim_ins_mode
+}
+zle -N zle-line-finish
+
 
 #{{{ Prompt!
 function _git_time_since_commit() {
@@ -364,27 +394,7 @@ function _git_time_since_commit() {
     echo "$color$commit_age%{$reset_color%}"
   fi
 }
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}⚑ "
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}▴ "
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[cyan]%}§ "
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}◒ "
-# Colors vary depending on time lapsed.
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
-ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
-
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 #colors: black blue cyan green magenta red white yellow
 host_color=cyan
 time_color=blue
@@ -394,16 +404,16 @@ directory_color=blue
 error_color=red
 jobs_color=green
 
-host_prompt="%{$fg_bold[$host_color]%}‹ty-l6›%{$reset_color%}"
+host_prompt="%{$fg[$host_color]%}%B%n%b%{$reset_color%}"
 #host_prompt="%{$fg_bold[$host_color]%}‹ƭƴ-ĺ6›%{$reset_color%}"
 
-jobs_prompt1="%{$fg_bold[$jobs_color]%}(%{$reset_color%}"
+jobs_prompt1="%{$fg[$jobs_color]%}(%{$reset_color%}"
 
-jobs_prompt2="%{$fg[$jobs_color]%}%j%{$reset_color%}"
+jobs_prompt2="%{$fg[$jobs_color]%}%jj%{$reset_color%}"
 
-jobs_prompt3="%{$fg_bold[$jobs_color]%})%{$reset_color%}"
+jobs_prompt3="%{$fg[$jobs_color]%})%{$reset_color%}"
 
-jobs_total="%(1j.${jobs_prompt1}${jobs_prompt2}${jobs_prompt3} .)"
+jobs_total="%(1j.${jobs_prompt2} .)"
 
 time_prompt1="%{$fg_bold[$time_color]%}‹%{$reset_color%}"
 
@@ -415,7 +425,7 @@ time_total="${time_prompt1}${time_prompt2}${time_prompt3}"
 
 error_prompt1="%{$fg_bold[$error_color]%}%{$reset_color%}"
 
-error_prompt2="%{$fg[$error_color]%}%U%?%u%{$reset_color%}"
+error_prompt2="%{$fg[$error_color]%}%B%?%u%{$reset_color%}"
 
 error_prompt3="%{$fg_bold[$error_color]%}%{$reset_color%}"
 
@@ -429,18 +439,16 @@ case "$TERM" in
 	directory_prompt=""
   ;;
   (*)
-	directory_prompt="%{$fg[$directory_color]%}%3~%{$reset_color%} "
+	directory_prompt="%{$fg[$directory_color]%}%B%3~%b%{$reset_color%}"
   ;;
 esac
 
 if [[ $USER == root ]]; then
 	post_prompt="%{$fg_bold[$root_color]%}%#%{$reset_color%}"
 else
-	post_prompt="%{$fg_bold[$user_color]%}→%{$reset_color%}"
+	post_prompt="%{$fg_bold[$user_color]%}❯%{$reset_color%}"
 fi
 
-#PS1="${host_prompt} ${jobs_total}${time_total} ${error_total}${directory_prompt}${post_prompt} "
-PS1="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt} "
 ### PROMPT}
 #ĺƭƴ
 #ƶʠľ
@@ -450,46 +458,29 @@ PS1="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt}
 #Λ Ξ Ο Π Σ Φ Ψ Ω Ϊ Ϋ ά έ ή ί ΰ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω ϊ ϋ ό ύ ώ Ϗ ϐ ϑ ϒ ϓ ϔ ϕ ϖ ϗ Ϙ ϙ Ϛ ϛ Ϝ ϝ Ϟ ϟ Ϡ ϡ Ϣ ϣ Ϥ ϥ Ϧ ϧ
 #ϯ
 
-##在命令前插入 sudo {{{
-##定义功能
-sudo-command-line() {
-	[[ -z $BUFFER  ]] && zle up-history
-	[[ $BUFFER != sudo\ *  ]] && BUFFER="sudo $BUFFER"
-	zle end-of-line #光标移动到行末
-}
-zle -N sudo-command-line
-#定义快捷键为： [Esc] [Esc]
-bindkey "\e\e" sudo-command-line
-##}}}
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+
+#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}✗%{$reset_color%}"
+#ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}) %{$fg[green]%}✔%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖"
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
+# Colors vary depending on time lapsed.
+ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
+ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
+ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
+ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 
 
-#colors: black blue cyan green magenta red white yellow
-INS_color=magenta
-NOR_color=black
-vim_ins_mode="%{$fg_bold[$INS_color]%}[INS]%{$reset_color%}"
-vim_cmd_mode="%{$fg_bold[$NOR_color]%}[NOR]%{$reset_color%}"
-vim_mode=$vim_ins_mode
+#PS1="${host_prompt} ${jobs_total}${time_total} ${error_total}${directory_prompt}${post_prompt} "
+#PROMPT="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt} "
 
-function zle-keymap-select {
-	vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-	zle reset-prompt
-}
-zle -N zle-keymap-select
-function zle-line-finish {
-	vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
-RPROMPT='${vim_mode}'
-
-ZSH_THEME="avit"
-
-unsetopt correct_all
-
-
-# preexec() {
-	#if [[ $!! == "git clone"* ]]; then
-		#if [[ $? == 0 ]]; then
-			#echo ${!!#*clone } >> ~P/git_list
-		#fi
-	#fi
-#}
+PROMPT='${directory_prompt} $(git_prompt_info)$(git_prompt_status) ${post_prompt} '
+RPROMPT='${error_total}${jobs_total}${vim_mode}'
