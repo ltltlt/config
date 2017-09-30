@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export HOME=/home/home-dir
+export HOME=/home/ty-l8
 export ZSH=$HOME/.oh-my-zsh
 
 # path for python
@@ -101,12 +101,11 @@ alias cp='cp'
 alias mv='mv'
 alias rm='rm'
 alias grep='grep --color=auto'
-alias y='yaourt'
 alias dict=ydcv
 alias tarn='tar jxvf'
 alias tarc='tar jcvf'
 alias tmux='tmux -2'
-alias lock='xscreensaver-command -lock'
+alias lock='gnome-screensaver-command -l'
 alias pingbaidu='ping www.baidu.com'
 alias pinggoogle='ping www.google.com'
 alias pingszu='ping www.szu.edu.cn'
@@ -216,9 +215,10 @@ hash -d C="$HOME/CLanguage"
 hash -d CPP="$HOME/C++"
 hash -d L="$HOME/lisp"
 hash -d P="$HOME/python"
+hash -d PP='/usr/lib/python3.5/site-packages'
 hash -d M="$HOME/mariaDB"
 hash -d H="$HOME/html"
-hash -d S="$HOME/shell"
+hash -d B="$HOME/bash_lty"
 #}}}
 
 
@@ -403,7 +403,7 @@ directory_color=blue
 error_color=red
 jobs_color=green
 
-host_prompt="%{$fg[$host_color]%}%B%n%b%{$reset_color%}"
+host_prompt="%{$fg[$host_color]%}%B%n%b%{$reset_color%} "
 #host_prompt="%{$fg_bold[$host_color]%}‹ƭƴ-ĺ6›%{$reset_color%}"
 
 jobs_prompt1="%{$fg[$jobs_color]%}(%{$reset_color%}"
@@ -438,14 +438,15 @@ case "$TERM" in
 	directory_prompt=""
   ;;
   (*)
-	directory_prompt="%{$fg[$directory_color]%}%B%3~%b%{$reset_color%}"
+	directory_prompt="%{$fg[$directory_color]%}%B%3~%b%{$reset_color%} "
   ;;
 esac
 
 if [[ $USER == root ]]; then
-	post_prompt="%{$fg_bold[$root_color]%}%#%{$reset_color%}"
+	post_prompt="%{$fg_bold[$root_color]%}%#%{$reset_color%} "
 else
-	post_prompt="%{$fg_bold[$user_color]%}❯%{$reset_color%}"
+	post_prompt="%{$fg_bold[$user_color]%}❯%{$reset_color%} "		# 某些字体下乱码
+	#post_prompt="%{$fg_bold[$user_color]%}$%{$reset_color%} "
 fi
 
 ### PROMPT}
@@ -458,19 +459,19 @@ fi
 #ϯ
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 
 #ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}✗%{$reset_color%}"
 #ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}) %{$fg[green]%}✔%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} ✖"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}✹ "
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%}➜ "
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}═ "
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}✭ "
 # Colors vary depending on time lapsed.
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
 ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
@@ -481,5 +482,14 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 #PS1="${host_prompt} ${jobs_total}${time_total} ${error_total}${directory_prompt}${post_prompt} "
 #PROMPT="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt} "
 
-PROMPT='${directory_prompt} $(git_prompt_info)$(git_prompt_status) ${post_prompt} '
+PROMPT='${host_prompt}${directory_prompt}$(git_prompt_info)$(git_prompt_status)${post_prompt}'
 RPROMPT='${error_total}${jobs_total}${vim_mode}'
+
+export PATH=/usr/local/cuda-8.0/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:$LD_LIBRARY_PATH
+
+# added by Anaconda3 4.4.0 installer
+export PATH="$HOME/anaconda3/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:$HOME/python/phantomjs-2.1.1-linux-x86_64/bin"
+export PYTHONPATH=$PYTHONPATH:$HOME/anaconda3/lib/python3.6/site-packages

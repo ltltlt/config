@@ -36,7 +36,7 @@ Bundle 'https://github.com/scrooloose/nerdtree'
 Bundle 'https://github.com/scrooloose/nerdcommenter'
 Bundle 'https://github.com/nathanaelkane/vim-indent-guides'
 Bundle 'https://github.com/terryma/vim-multiple-cursors'
-"Bundle 'https://github.com/davidhalter/jedi-vim'
+"Bundle 'https://github.com/davidhalter/jedi-vim'		" very hard to use
 "Bundle 'lrvick/Conque-Shell'
 " git repos on your local machine (i.e. when working on your own plugin)
 "Plugin 'file:///home/gmarik/path/to/plugin'
@@ -50,8 +50,8 @@ Plugin 'honza/vim-snippets'
 "
 "use for the nerdcommenter
 let mapleader=","		"默认<leader>是\，使用这个命令可以改变<leader>
-let s:kernel_release="Archlinux"
-let s:username="ty-l6"
+let s:kernel_release="Ubuntu"
+let s:username="ty-l8"
 let s:email="liuty196888@gmail.com"
 let s:time_format="%F %a %R"
 filetype plugin indent on     " required
@@ -101,13 +101,13 @@ set cmdheight=1     " 命令行（在状态行下）的高度，设置为1
 set novisualbell    " 不要闪烁(不明白)  
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容  
 set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)  
-set foldenable      " 允许折叠  
-set foldmethod=manual   " 手动折叠  
+set foldenable      " 允许启动vim时折叠  
+set foldmethod=syntax   " 手动折叠  
 set background=dark "背景使用黑色	"各种主题都有亮色和暗色，light和dark
 "set guifont=Bitstream\Vera\Sans\Mono\10
 "set guifont=Arial\monospaced\for\SAP\9
 "set guifont=Source\ Code\ Pro\ 12
-set guifont=DejaVu\ Sans\ Mono\ Book\ 11
+set guifont=DejaVu\ Sans\ Mono\ Book\ for\ Powline\ 11
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""新文件标题
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -147,10 +147,10 @@ func SetTitle()
 		call append(line(".")+5, "")
 	endif
 	if &filetype == 'c'
-		call append(line(".")+6, "#include<stdio.h>")
+		call append(line(".")+6, "#include <stdio.h>")
 		call append(line(".")+7, "")
 	elseif &filetype == 'cpp'
-		call append(line(".")+6, "#include<iostream>")
+		call append(line(".")+6, "#include <iostream>")
 		call append(line(".")+7, "")
 		call append(line(".")+8, "")
 	endif
@@ -202,17 +202,9 @@ func! CompileRunGcc()
 		exec "!javac %" 
 		exec "!java %<"
 	elseif &filetype is 'sh'
-		:!./%
+		:!zsh %
 	elseif &filetype is 'python'
-		let mp = &makeprg
-		let ef = &errorformat
-		let exeFile = expand("%:t")
-		setlocal makeprg=python\ -u
-		set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-		silent make %
-		copen
-		let &makeprg = mp
-		let &errorformat = ef
+		exec "!python3 %"
 	elseif &filetype is 'lisp'
 		exec "!sbcl < %"
 	endif
@@ -243,7 +235,7 @@ set completeopt=preview,menu
 "允许插件  
 filetype plugin on
 "共享剪贴板  
-set clipboard+=unnamed 
+set clipboard+=unnamedplus
 "make 运行
 :set makeprg=g++\ -Wall\ \ %
 "自动保存
@@ -405,7 +397,8 @@ let g:ycm_server_use_vim_stdout = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_key_invoke_completion = ''
 " python 解释器路径
-let g:ycm_path_to_python_interpreter='/usr/bin/python'
+let g:ycm_path_to_python_interpreter='/home/ty-l8/anaconda3/bin/python'
+let g:ycm_server_python_interpreter='/home/ty-l8/anaconda3/bin/python'
 " 字符中也开启补全
 let g:ycm_complete_in_strings = 1
 
@@ -414,6 +407,8 @@ nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
 nnoremap <leader>gd :YcmCompleter GetDoc<CR>
+
+"let g:loaded_youcompleteme = 1			" don't load ycm for python, use jedi instead
 
 """""""""""""""""""""""""""""""""""""""
 "            indent-guides            "
@@ -442,7 +437,7 @@ nnoremap <leader>gd :YcmCompleter GetDoc<CR>
 let g:multi_cursor_use_default_mapping=0
 let g:multi_cursor_next_key='<S-n>'
 let g:multi_cursor_prev_key='<S-p>'
-let g:multi_cursor_skip_key='<S-x>'
+let g:multi_cursor_skip_key='<S-s>'
 let g:multi_cursor_quit_key='<Esc>'
 
 """""""""""""""""""""""""""""""""""""""
@@ -464,6 +459,20 @@ let g:ctrlp_funky_syntax_highlight = 1
 """""""""""""""""""""""""""""""""""""""
 "				airline				  "
 """""""""""""""""""""""""""""""""""""""
-let g:airline_theme="luna" 
+let g:airline_theme="lucius" "luna, raven, simple, papercolor
 "这个是安装字体后 必须设置此项
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_section_c = ''	" unset filename below(because it already have above)
+"""""""""""""""""""""""""""""""""""""""
+"			word-search				  "
+"""""""""""""""""""""""""""""""""""""""
+map <Leader>t :call Translate()<CR>
+
+"""""""""""""""""""""""""""""""""""""""
+"              snippet                "
+"""""""""""""""""""""""""""""""""""""""
+let g:snips_author="ty-l8"
+let g:snips_email="liuty196888@gmail.com"
+let g:snips_github="https://github.com/ltltlt"
