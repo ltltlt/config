@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export HOME=/home/ty-l8
+export HOME=/home/ty-l9
 export ZSH=$HOME/.oh-my-zsh
 
 # path for python
@@ -215,8 +215,6 @@ hash -d C="$HOME/CLanguage"
 hash -d CPP="$HOME/C++"
 hash -d L="$HOME/lisp"
 hash -d P="$HOME/python"
-hash -d PP='/usr/lib/python3.5/site-packages'
-hash -d M="$HOME/mariaDB"
 hash -d H="$HOME/html"
 hash -d B="$HOME/bash_lty"
 #}}}
@@ -482,14 +480,10 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 #PS1="${host_prompt} ${jobs_total}${time_total} ${error_total}${directory_prompt}${post_prompt} "
 #PROMPT="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt} "
 
-PROMPT='${host_prompt}${directory_prompt}$(git_prompt_info)$(git_prompt_status)${post_prompt}'
+PROMPT='${directory_prompt}$(git_prompt_info)$(git_prompt_status)${post_prompt}'
 RPROMPT='${error_total}${jobs_total}${vim_mode}'
-
-export PATH=/usr/local/cuda-8.0/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:$LD_LIBRARY_PATH
 
 # added by Anaconda3 4.4.0 installer
 export PATH="$HOME/anaconda3/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$PATH:$HOME/python/phantomjs-2.1.1-linux-x86_64/bin"
 export PYTHONPATH=$PYTHONPATH:$HOME/anaconda3/lib/python3.6/site-packages
