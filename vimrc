@@ -50,8 +50,8 @@ Plugin 'honza/vim-snippets'
 "
 "use for the nerdcommenter
 let mapleader=","		"默认<leader>是\，使用这个命令可以改变<leader>
-let s:kernel_release="Chrome"
-let s:username="ty-l9"
+let s:kernel_release="Arch"
+let s:username="ty-l6"
 let s:email="liuty196888@gmail.com"
 let s:time_format="%F %a %R"
 filetype plugin indent on     " required
@@ -397,8 +397,8 @@ let g:ycm_server_use_vim_stdout = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_key_invoke_completion = ''
 " python 解释器路径
-let g:ycm_path_to_python_interpreter='/home/ty-l9/anaconda3/bin/python'
-let g:ycm_server_python_interpreter='/home/ty-l9/anaconda3/bin/python'
+"let g:ycm_path_to_python_interpreter='/home/ty-l9/anaconda3/bin/python'
+"let g:ycm_server_python_interpreter='/home/ty-l9/anaconda3/bin/python'
 " 字符中也开启补全
 let g:ycm_complete_in_strings = 1
 
@@ -473,6 +473,6 @@ map <Leader>t :call Translate()<CR>
 """""""""""""""""""""""""""""""""""""""
 "              snippet                "
 """""""""""""""""""""""""""""""""""""""
-let g:snips_author="ty-l9"
+let g:snips_author="ty-l6"
 let g:snips_email="liuty196888@gmail.com"
 let g:snips_github="https://github.com/ltltlt"
