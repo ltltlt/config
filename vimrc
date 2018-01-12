@@ -11,8 +11,6 @@ call vundle#rc()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/vundle'
 
-Plugin 'christoomey/vim-tmux-navigator'		" work with tmux
-
 " The following are examples of different formats supported.
 " Keep Plugin commands between here and filetype plugin indent on.
 " scripts on GitHub repos
@@ -37,8 +35,13 @@ Bundle 'https://github.com/scrooloose/nerdtree'
 Bundle 'https://github.com/scrooloose/nerdcommenter'
 Bundle 'https://github.com/nathanaelkane/vim-indent-guides'
 Bundle 'https://github.com/terryma/vim-multiple-cursors'
+"Bundle 'https://github.com/davidhalter/jedi-vim'		" very hard to use
+"Bundle 'lrvick/Conque-Shell'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
 
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'fatih/vim-go'
 
 "模块补全
 Plugin 'SirVer/ultisnips'
@@ -46,11 +49,11 @@ Plugin 'honza/vim-snippets'
 " ...
 "
 "use for the nerdcommenter
-let mapleader=","		" change default leader key
-let s:kernel_release="Ubuntu"		" i have no better way
-let s:username="$USER"
-let s:email="$WORK_EMAIL"
-let s:time_format="%F %a %R"
+let mapleader=','		" change default leader key
+let s:kernel_release='Chrome'
+let s:username=$USER
+let s:email=$WORK_EMAIL
+let s:time_format='%F %a %R'
 filetype plugin indent on     " required
 
 map <F9> :call SaveInputData()<CR>
@@ -102,6 +105,7 @@ set foldenable      " 允许启动vim时折叠
 set foldmethod=syntax   " 手动折叠  
 set background=dark "背景使用黑色	"各种主题都有亮色和暗色，light和dark
 set guifont=DejaVu\ Sans\ Mono\ Book\ for\ Powline\ 11
+:hi Folded ctermbg=240
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""新文件标题
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,6 +167,7 @@ endfunc
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "键盘命令
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:nnoremap <Leader>w <C-w>	" because ctrl-w conflict with chrome shortcut
 nmap <leader>w :w!<cr>
 nmap <leader>f :find<cr>
 
@@ -182,26 +187,28 @@ map <M-F2> :tabnew<CR>
 map <F3> :tabnew .<CR>  
 "打开树状文件目录  
 map <C-F3> \be  
-"C，C++ 按F5编译运行
-nmap <leader>r :call RunProgram()<CR>
-map <F5> :call RunProgram()<CR>
-func! RunProgram()
+nmap <leader>r :call Run()<CR>
+func! Run()
 	exec "w"
 	if &filetype is 'c'
-		exec "!clang % -o %< -lpthread && ./%<"
+		exec "!clang % -o %<"
+		exec "! ./%<"
 	elseif &filetype is 'cpp'
-		exec "!g++ -std=c++14 % -o %< -lpthread && ./%<"
+		exec "!g++ -std=c++14 % -o %< -lpthread"
+		exec "! ./%<"
 	elseif &filetype is 'java' 
-		exec "!javac % && java %<"
+		exec "!javac %" 
+		exec "!java %<"
 	elseif &filetype is 'sh'
-		:!zsh %
+		:!bash %
 	elseif &filetype is 'python'
 		exec "!python3 %"
 	elseif &filetype is 'lisp'
 		exec "!sbcl < %"
+	elseif &filetype is 'go'
+		exec "GoRun %"
 	endif
 endfunc
-"C,C++的调试
 map <F10> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
@@ -235,7 +242,7 @@ set autowrite
 set ruler                   " 打开状态栏标尺
 set cursorline              " 高亮当前行
 set cursorcolumn			" 高亮显示当前列
-set magic                   " 设置魔术
+set magic                   " 设置魔术(basic regular expression)
 set guioptions-=T           " 隐藏工具栏
 set guioptions-=m           " 隐藏菜单栏
 set foldcolumn=0
@@ -309,33 +316,13 @@ set matchtime=1
 set scrolloff=3
 " 设置进入paste模式的开关
 nmap <leader>p :set invpaste paste?<CR>
+"nnoremap <F3> :set invpaste paste?<CR>
+"imap <F3> <C-O>:set invpaste paste?<CR>
 set pastetoggle=<F3>
 " 高亮显示普通txt文件（需要txt.vim脚本）
 au BufRead,BufNewFile *  setfiletype txt
-"自动补全
-":inoremap ( ()<ESC>i
-":inoremap ) <c-r>=ClosePair(')')<CR>
-":inoremap { {<CR>}<ESC>O
-":inoremap } <c-r>=ClosePair('}')<CR>
-":inoremap [ []<ESC>i
-":inoremap ] <c-r>=ClosePair(']')<CR>
-":inoremap < <><ESC>i
-":inoremap > <c-r>=ClosePair(']')<CR>
-":inoremap " ""<ESC>i
-":inoremap ' ''<ESC>i
-"function! ClosePair(char)
-"	if getline('.')[col('.') - 1] == a:char
-"		return"\<Right>"
-"	else
-"		return a:char
-"	endif
-"endfunction
 "打开文件类型检测, 加了这句才可以用智能补全
 set completeopt=longest,menu
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 设置状态栏主题风格
-let g:Powerline_colorscheme='solarized256'
 
 """""""""""""""""""""""""""""""""""""""
 "              UltiSnips              "
@@ -367,7 +354,7 @@ map <F7> :NERDTree<CR>
 """""""""""""""""""""""""""""""""""""""
 "            YouCompleteMe            "
 """""""""""""""""""""""""""""""""""""""
-let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'   "配置默认的ycm_extra_conf.py
+let g:ycm_global_ycm_extra_conf=$HOME.'/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf=1    "打开vim时不再询问是否加载ycm_extra_conf.py配置
 let g:ycm_collect_identifiers_from_tag_files = 0 "使用ctags生成的tags文件"
 let g:ycm_error_symbol='>>'  "错误标志
@@ -388,8 +375,8 @@ let g:ycm_server_use_vim_stdout = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_key_invoke_completion = ''
 " python 解释器路径
-let g:ycm_path_to_python_interpreter='/home/ty-l8/anaconda3/bin/python'
-let g:ycm_server_python_interpreter='/home/ty-l8/anaconda3/bin/python'
+let g:ycm_path_to_python_interpreter=$HOME.'/anaconda3/bin/python'
+let g:ycm_server_python_interpreter=$HOME.'/anaconda3/bin/python'
 " 字符中也开启补全
 let g:ycm_complete_in_strings = 1
 
@@ -398,9 +385,10 @@ nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
 nnoremap <leader>gd :YcmCompleter GetDoc<CR>
+" in terminal fg color is purple, bg color is None
+highlight Pmenu ctermfg=5 ctermbg=0 guifg=#ffffff guibg=#0000ff
 
 "let g:loaded_youcompleteme = 1			" don't load ycm for python, use jedi instead
-highlight Pmenu ctermfg=5 ctermbg=0 guifg=#ffffff guibg=#0000ff
 
 """""""""""""""""""""""""""""""""""""""
 "            indent-guides            "
@@ -451,7 +439,7 @@ let g:ctrlp_funky_syntax_highlight = 1
 """""""""""""""""""""""""""""""""""""""
 "				airline				  "
 """""""""""""""""""""""""""""""""""""""
-let g:airline_theme="lucius" "luna, raven, simple, papercolor
+let g:airline_theme="monochrome" "ubaryd, monochrome, raven, luna, simple, papercolor, lucius
 "这个是安装字体后 必须设置此项
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -461,6 +449,11 @@ let g:airline_section_c = ''	" unset filename below(because it already have abov
 """""""""""""""""""""""""""""""""""""""
 "              snippet                "
 """""""""""""""""""""""""""""""""""""""
-let g:snips_author="$USER"
-let g:snips_email="$WORK_EMAIL"
-let g:snips_github="https://github.com/ltltlt"
+let g:snips_author=$USER
+let g:snips_email=$WORK_EMAIL
+let g:snips_github='https://github.com/ltltlt'
+
+"{{ Go
+nmap <leader>gi :GoImports<cr>
+nmap <leader>gd :GoDoc<cr>
+"}}
