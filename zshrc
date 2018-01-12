@@ -2,17 +2,9 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export HOME=/home/ty-l9
+export HOME=/home/$USER
 export ZSH=$HOME/.oh-my-zsh
-
-# path for python
-
-#if $PYTHONPATH ; then
-	#PYTHONPATH=$PYTHONPATH:'$HOME/python/mymodule'
-#else
-	#PYTHONPATH='$HOME/python/mymodule'
-#fi
-#export PYTHONPATH
+export TERM=xterm-256color		# show more color
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -34,8 +26,7 @@ DISABLE_AUTO_UPDATE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-#ENABLE_CORRECTION="true"
-DISABLE_CORRECTION="true"
+ENABLE_CORRECTION="false"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -57,23 +48,22 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions command-not-found)
 
+ZSH_THEME=lty			# i define it by myself
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
+if [[ -n MANPATH ]]; then
+	export MANPATH="/usr/local/man:$MANPATH"
+else
+	export MANPATH="/usr/local/man"
+fi
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
 export EDITOR 'vim'
 
 # Compilation flags
@@ -82,35 +72,26 @@ export ARCHFLAGS="-arch x86_64"
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# alias {{
 alias ls='ls -F --color=auto'
+alias l=ls
 alias ll="ls -al"
-alias l="ls"
 alias la='ls -a'
 alias l.='ls -d .*'
-alias vi="vim"
-alias emacs="emacs -nw"
-alias cp='cp'
-alias mv='mv'
-alias rm='rm'
+alias v=vim
+alias vi=vim
+alias emacs="emacs -nw"		# cli
+alias mv='mv -i'
+alias rm='rm -i'
 alias grep='grep --color=auto'
-alias dict=ydcv
-alias tarn='tar jxvf'
-alias tarc='tar jcvf'
 alias tmux='tmux -2'
-alias lock='gnome-screensaver-command -l'
 alias pingbaidu='ping www.baidu.com'
 alias pinggoogle='ping www.google.com'
-alias pingszu='ping www.szu.edu.cn'
 alias mount='mount -o uid=1000'
-
+alias psall='ps xao pid,ppid,pgid,sid,command'
+alias valgrind='valgrind --leak-check=full --show-leak-kinds=all'
+# }}
 
 
 #允许在交互模式中使用注释  例如：
@@ -125,15 +106,16 @@ setopt AUTO_CD
 #/v/c/p/p => /var/cache/pacman/pkg
 setopt complete_in_word
 
-#use vim mode
-setopt VI
+#use emacs mode
+setopt emacs
 
 setopt NO_BEEP
 
-#自动补全功能 {{{
+#自动补全功能 {{
 setopt AUTO_LIST
 setopt AUTO_MENU
 unsetopt correct_all
+# }}
 
 #自动补全选项
 #zstyle ':completion:*' verbose yes
@@ -175,146 +157,81 @@ zstyle ':completion:*:*:*:*:processes' force-list always
 zstyle ':completion:*:processes' command 'ps -au$USER'
 
 
-##空行(光标在行首)补全 "cd " {{{
-user-complete(){
-case $BUFFER in
-"" )                       # 空行填入 "cd "
-BUFFER="cd "
-zle end-of-line
-zle expand-or-complete
-;;
-"cd --" )                  # "cd --" 替换为 "cd +"
-BUFFER="cd +"
-zle end-of-line
-zle expand-or-complete
-;;
-"cd +-" )                  # "cd +-" 替换为 "cd -"
-BUFFER="cd -"
-zle end-of-line
-zle expand-or-complete
-;;
-* )
-zle expand-or-complete
-;;
-esac
+##空行(光标在行首)补全 "cd " {{
+function user-complete(){
+	case $BUFFER in
+	"" )                       # 空行填入 "cd "
+	BUFFER="cd "
+	zle end-of-line
+	zle expand-or-complete
+	;;
+	* )
+	zle expand-or-complete
+	;;
+	esac
 }
 zle -N user-complete
 bindkey "\t" user-complete
+# }}
 
 
-#[Esc][h] man 当前命令时，显示简短说明
-alias run-help >&/dev/null && unalias run-help
 autoload run-help
 
-
-
-#路径别名 {{{
-#进入相应的路径时只要 cd ~xxx
+# 路径别名 {{
 hash -d E="/etc/"
 hash -d C="$HOME/CLanguage"
 hash -d CPP="$HOME/C++"
 hash -d L="$HOME/lisp"
 hash -d P="$HOME/python"
 hash -d H="$HOME/html"
-hash -d B="$HOME/bash_lty"
-#}}}
+hash -d S="$HOME/shell"
+hash -d G="$HOME/go"
+# }}
 
 
-#{{{自定义补全
-#补全 ping
-zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com {www.,}szu.edu.cn
+# 补全ping {{
+zstyle ':completion:*:ping:*' hosts www.google.com {www.,}szu.edu.cn www.baidu.com
+# }}
 
 
 
-#漂亮又实用的命令高亮界面
+# 高亮命令 {{
 setopt extended_glob
- TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
- 
- recolor-cmd() {
-     region_highlight=()
-     colorize=true
-     start_pos=0
-     for arg in ${(z)BUFFER}; do
-         ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
-         ((end_pos=$start_pos+${#arg}))
-         if $colorize; then
-             colorize=false
-             res=$(LC_ALL=C builtin type $arg 2>/dev/null)
-             case $res in
-                 *'reserved word'*)   style="fg=magenta,bold";;
-                 *'alias for'*)       style="fg=cyan,bold";;
-                 *'shell builtin'*)   style="fg=yellow,bold";;
-                 *'shell function'*)  style='fg=green,bold';;
-                 *"$arg is"*)
-                     [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
-                 *)                   style='none,bold';;
-             esac
-             region_highlight+=("$start_pos $end_pos $style")
-         fi
-         [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
-         start_pos=$end_pos
-     done
- }
-check-cmd-self-insert() { zle .self-insert && recolor-cmd }
- check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
- 
- zle -N self-insert check-cmd-self-insert
- zle -N backward-delete-char check-cmd-backward-delete-char
+TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
 
-
-
-####{{{
-function timeconv { date -d @$1 +"%Y-%m-%d %T" }
- 
-# }}}
-
-
-#{{{ F1 计算器
-arith-eval-echo() {
-LBUFFER="${LBUFFER}echo \$(( "
-RBUFFER=" ))$RBUFFER"
+function recolor-cmd() {
+	region_highlight=()
+	colorize=true
+	start_pos=0
+	for arg in ${(z)BUFFER}; do
+		((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+		((end_pos=$start_pos+${#arg}))
+		if $colorize; then
+			colorize=false
+			res=$(LC_ALL=C builtin type $arg 2>/dev/null)
+			case $res in
+				*'reserved word'*)   style="fg=magenta,bold";;
+				*'alias for'*)       style="fg=cyan,bold";;
+				*'shell builtin'*)   style="fg=yellow,bold";;
+				*'shell function'*)  style='fg=green,bold';;
+				*"$arg is"*)
+					[[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
+				*)                   style='none,bold';;
+			esac
+			region_highlight+=("$start_pos $end_pos $style")
+		fi
+		[[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
+		start_pos=$end_pos
+	done
 }
-zle -N arith-eval-echo
-bindkey "^[[11~" arith-eval-echo
-#}}}
+function check-cmd-self-insert() { zle .self-insert && recolor-cmd }
+function check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
 
+zle -N self-insert check-cmd-self-insert
+zle -N backward-delete-char check-cmd-backward-delete-char
+# }}
 
-### {PROMPT1
-#autoload colors
-#colors
- 
-#for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-#eval _$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-#eval $color='%{$fg[${(L)color}]%}'
-#(( count = $count + 1 ))
-#done
-#FINISH="%{$terminfo[sgr0]%}"
-
-###命令提示符
-##RPROMPT=$(echo "$RED%D %T$FINISH")
-##PROMPT=$(echo "$CYAN%n@$YELLOW%M:$GREEN%/$_YELLOW>$FINISH ")
-
-#setopt PROMPT_SUBST     # allow funky stuff in prompt
-#color="blue"
-#if [ "$USER" = "root"  ]; then
-	#color="red"         # root is red, user is blue
-#fi;
-#prompt="%{$fg[$color]%}%n%{$reset_color%}@%U%{$fg[yellow]%}%m%{$reset_color%}%u %T %B%~%b "
-#RPROMPT='${vim_mode} ${vcs_info_msg_0_}'
-### }PROMPT1
-
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="ys"
-# ZSH_THEME="miloshadzic"
-# ZSH_THEME="nebirhos"
- ZSH_THEME="agnoster"
-# ZSH_THEME="random"
-
-
-# History
-# ##
+# history {{
 HISTFILE=~/.zsh_history         # where to store zsh config
 HISTSIZE=1024                   # big history
 SAVEHIST=1024                   # big history
@@ -328,162 +245,42 @@ setopt share_history            # share hist between sessions
 setopt bang_hist                # !keyword
 
 bindkey '^R' history-incremental-search-backward
+# }}
 
 
-##在命令前插入 sudo {{{
-##定义功能
-sudo-command-line() {
+# 在命令前插入sudo {{
+function sudo-command-line() {
 	[[ -z $BUFFER  ]] && zle up-history
 	[[ $BUFFER != sudo\ *  ]] && BUFFER="sudo $BUFFER"
 	zle end-of-line #光标移动到行末
 }
-zle -N sudo-command-line
-#定义快捷键为： [Esc] [Esc]
-bindkey "\e\e" sudo-command-line
-##}}}
+zle -N sudo-command-line		# new zsh widget
+bindkey "\e\e" sudo-command-line	# shortcut ESC ESC
+# }}
 
+# Path {{
+# anaconda
+if [[ $PATH != *$HOME/anaconda3/bin* ]]; then
+	export PATH="$HOME/anaconda3/bin:$PATH"
+fi
+export PYTHONPATH=$PYTHONPATH:$HOME/anaconda3/lib/python3.6/site-packages
 
-#colors: black blue cyan green magenta red white yellow
-INS_color=magenta
-NOR_color=black
-vim_ins_mode="%{$fg_bold[$INS_color]%}[I]%{$reset_color%}"
-vim_cmd_mode="%{$fg_bold[$NOR_color]%}[N]%{$reset_color%}"
-vim_mode=$vim_ins_mode
+# golang
+if [[ $PATH != */use/local/go/bin* ]]; then
+	export PATH="$PATH:/usr/local/go/bin"
+fi
+export GOPATH="$HOME/go"
 
-function zle-keymap-select {
-	vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-	zle reset-prompt
-}
-zle -N zle-keymap-select
-function zle-line-finish {
-	vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
-
-
-#{{{ Prompt!
-function _git_time_since_commit() {
-# Only proceed if there is actually a commit.
-  if git log -1 > /dev/null 2>&1; then
-    # Get the last commit.
-    last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null)
-    now=$(date +%s)
-    seconds_since_last_commit=$((now-last_commit))
-
-    # Totals
-    minutes=$((seconds_since_last_commit / 60))
-    hours=$((seconds_since_last_commit/3600))
-
-    # Sub-hours and sub-minutes
-    days=$((seconds_since_last_commit / 86400))
-    sub_hours=$((hours % 24))
-    sub_minutes=$((minutes % 60))
-
-    if [ $hours -gt 24 ]; then
-      commit_age="${days}d"
-    elif [ $minutes -gt 60 ]; then
-      commit_age="${sub_hours}h${sub_minutes}m"
-    else
-      commit_age="${minutes}m"
-    fi
-
-    color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
-    echo "$color$commit_age%{$reset_color%}"
-  fi
-}
-
-#colors: black blue cyan green magenta red white yellow
-host_color=cyan
-time_color=blue
-user_color=green
-root_color=red
-directory_color=blue
-error_color=red
-jobs_color=green
-
-host_prompt="%{$fg[$host_color]%}%B%n%b%{$reset_color%} "
-#host_prompt="%{$fg_bold[$host_color]%}‹ƭƴ-ĺ6›%{$reset_color%}"
-
-jobs_prompt1="%{$fg[$jobs_color]%}(%{$reset_color%}"
-
-jobs_prompt2="%{$fg[$jobs_color]%}%jj%{$reset_color%}"
-
-jobs_prompt3="%{$fg[$jobs_color]%})%{$reset_color%}"
-
-jobs_total="%(1j.${jobs_prompt2} .)"
-
-time_prompt1="%{$fg_bold[$time_color]%}‹%{$reset_color%}"
-
-time_prompt2="%{$fg[$time_color]%}%D %T%{$reset_color%}"
-
-time_prompt3="%{$fg_bold[$time_color]%}›%{$reset_color%}"
-
-time_total="${time_prompt1}${time_prompt2}${time_prompt3}"
-
-error_prompt1="%{$fg_bold[$error_color]%}%{$reset_color%}"
-
-error_prompt2="%{$fg[$error_color]%}%B%?%u%{$reset_color%}"
-
-error_prompt3="%{$fg_bold[$error_color]%}%{$reset_color%}"
-
-error_total="%(?..${error_prompt1}${error_prompt2}${error_prompt3} )"
-	
-case "$TERM" in
-  (screen)
-	function precmd() { print -Pn "\033]0;S $TTY:t{%100<...<%4~%<<}\007" }
-  ;;
-  (xterm)
-	directory_prompt=""
-  ;;
-  (*)
-	directory_prompt="%{$fg[$directory_color]%}%B%3~%b%{$reset_color%} "
-  ;;
-esac
-
-if [[ $USER == root ]]; then
-	post_prompt="%{$fg_bold[$root_color]%}%#%{$reset_color%} "
+# cuda
+export PATH=/usr/local/cuda-8.0/bin:$PATH
+if [[ -n $LD_LIBRARY_PATH ]]; then
+	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 else
-	post_prompt="%{$fg_bold[$user_color]%}❯%{$reset_color%} "		# 某些字体下乱码
-	#post_prompt="%{$fg_bold[$user_color]%}$%{$reset_color%} "
+	export LD_LIBRARY_PATH=/usr/local/cuda/lib64
 fi
 
-### PROMPT}
-#ĺƭƴ
-#ƶʠľ
-#ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ
-#ŷ Ÿ Ź ź Ż ż Ž ž
-#Ĺ ĺ Ļ ļ Ľ ľ Ŀ
-#Λ Ξ Ο Π Σ Φ Ψ Ω Ϊ Ϋ ά έ ή ί ΰ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω ϊ ϋ ό ύ ώ Ϗ ϐ ϑ ϒ ϓ ϔ ϕ ϖ ϗ Ϙ ϙ Ϛ ϛ Ϝ ϝ Ϟ ϟ Ϡ ϡ Ϣ ϣ Ϥ ϥ Ϧ ϧ
-#ϯ
-
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-
-#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}✗%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}) %{$fg[green]%}✔%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
-
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}✹ "
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%}➜ "
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}═ "
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}✭ "
-# Colors vary depending on time lapsed.
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
-ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
-ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
-
-
-#PS1="${host_prompt} ${jobs_total}${time_total} ${error_total}${directory_prompt}${post_prompt} "
-#PROMPT="${host_prompt} ${jobs_total}${error_total}${directory_prompt}${post_prompt} "
-
-PROMPT='${directory_prompt}$(git_prompt_info)$(git_prompt_status)${post_prompt}'
-RPROMPT='${error_total}${jobs_total}${vim_mode}'
-
-# added by Anaconda3 4.4.0 installer
-export PATH="$HOME/anaconda3/bin:$PATH"
+# local
 export PATH="$HOME/.local/bin:$PATH"
-export PYTHONPATH=$PYTHONPATH:$HOME/anaconda3/lib/python3.6/site-packages
+# }}
+
+source $HOME/.primary		# some primary environment variable

@@ -11,6 +11,8 @@ call vundle#rc()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/vundle'
 
+Plugin 'christoomey/vim-tmux-navigator'		" work with tmux
+
 " The following are examples of different formats supported.
 " Keep Plugin commands between here and filetype plugin indent on.
 " scripts on GitHub repos
@@ -24,7 +26,6 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}		" useful when write html
 " scripts from http://vim-scripts.org/vim/scripts.html
 Plugin 'L9'
-"Plugin 'FuzzyFinder'		it seems no maintainer anymore, use ctrlp instead
 Bundle 'ctrlpvim/ctrlp.vim'
 Plugin 'tacahiroy/ctrlp-funky'
 " scripts not on GitHub
@@ -36,10 +37,6 @@ Bundle 'https://github.com/scrooloose/nerdtree'
 Bundle 'https://github.com/scrooloose/nerdcommenter'
 Bundle 'https://github.com/nathanaelkane/vim-indent-guides'
 Bundle 'https://github.com/terryma/vim-multiple-cursors'
-"Bundle 'https://github.com/davidhalter/jedi-vim'		" very hard to use
-"Bundle 'lrvick/Conque-Shell'
-" git repos on your local machine (i.e. when working on your own plugin)
-"Plugin 'file:///home/gmarik/path/to/plugin'
 
 Plugin 'Valloric/YouCompleteMe'
 
@@ -49,10 +46,10 @@ Plugin 'honza/vim-snippets'
 " ...
 "
 "use for the nerdcommenter
-let mapleader=","		"默认<leader>是\，使用这个命令可以改变<leader>
-let s:kernel_release="Arch"
-let s:username="ty-l6"
-let s:email="liuty196888@gmail.com"
+let mapleader=","		" change default leader key
+let s:kernel_release="Ubuntu"		" i have no better way
+let s:username="$USER"
+let s:email="$WORK_EMAIL"
 let s:time_format="%F %a %R"
 filetype plugin indent on     " required
 
@@ -104,9 +101,6 @@ set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)
 set foldenable      " 允许启动vim时折叠  
 set foldmethod=syntax   " 手动折叠  
 set background=dark "背景使用黑色	"各种主题都有亮色和暗色，light和dark
-"set guifont=Bitstream\Vera\Sans\Mono\10
-"set guifont=Arial\monospaced\for\SAP\9
-"set guifont=Source\ Code\ Pro\ 12
 set guifont=DejaVu\ Sans\ Mono\ Book\ for\ Powline\ 11
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""新文件标题
@@ -189,18 +183,16 @@ map <F3> :tabnew .<CR>
 "打开树状文件目录  
 map <C-F3> \be  
 "C，C++ 按F5编译运行
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
+nmap <leader>r :call RunProgram()<CR>
+map <F5> :call RunProgram()<CR>
+func! RunProgram()
 	exec "w"
 	if &filetype is 'c'
-		exec "!clang % -o %<"
-		exec "! ./%<"
+		exec "!clang % -o %< -lpthread && ./%<"
 	elseif &filetype is 'cpp'
-		exec "!g++ -std=c++14 % -o %< -lpthread"
-		exec "! ./%<"
+		exec "!g++ -std=c++14 % -o %< -lpthread && ./%<"
 	elseif &filetype is 'java' 
-		exec "!javac %" 
-		exec "!java %<"
+		exec "!javac % && java %<"
 	elseif &filetype is 'sh'
 		:!zsh %
 	elseif &filetype is 'python'
@@ -316,8 +308,7 @@ set matchtime=1
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
 " 设置进入paste模式的开关
-nnoremap <F3> :set invpaste paste?<CR>
-imap <F3> <C-O>:set invpaste paste?<CR>
+nmap <leader>p :set invpaste paste?<CR>
 set pastetoggle=<F3>
 " 高亮显示普通txt文件（需要txt.vim脚本）
 au BufRead,BufNewFile *  setfiletype txt
@@ -397,8 +388,8 @@ let g:ycm_server_use_vim_stdout = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_key_invoke_completion = ''
 " python 解释器路径
-"let g:ycm_path_to_python_interpreter='/home/ty-l9/anaconda3/bin/python'
-"let g:ycm_server_python_interpreter='/home/ty-l9/anaconda3/bin/python'
+let g:ycm_path_to_python_interpreter='/home/ty-l8/anaconda3/bin/python'
+let g:ycm_server_python_interpreter='/home/ty-l8/anaconda3/bin/python'
 " 字符中也开启补全
 let g:ycm_complete_in_strings = 1
 
@@ -409,6 +400,7 @@ nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
 nnoremap <leader>gd :YcmCompleter GetDoc<CR>
 
 "let g:loaded_youcompleteme = 1			" don't load ycm for python, use jedi instead
+highlight Pmenu ctermfg=5 ctermbg=0 guifg=#ffffff guibg=#0000ff
 
 """""""""""""""""""""""""""""""""""""""
 "            indent-guides            "
@@ -465,14 +457,10 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_section_c = ''	" unset filename below(because it already have above)
-"""""""""""""""""""""""""""""""""""""""
-"			word-search				  "
-"""""""""""""""""""""""""""""""""""""""
-map <Leader>t :call Translate()<CR>
 
 """""""""""""""""""""""""""""""""""""""
 "              snippet                "
 """""""""""""""""""""""""""""""""""""""
-let g:snips_author="ty-l6"
-let g:snips_email="liuty196888@gmail.com"
+let g:snips_author="$USER"
+let g:snips_email="$WORK_EMAIL"
 let g:snips_github="https://github.com/ltltlt"
