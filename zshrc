@@ -269,6 +269,7 @@ export PYTHONPATH=$PYTHONPATH:$HOME/anaconda3/lib/python3.6/site-packages
 if [[ $PATH != */use/local/go/bin* ]]; then
 	export PATH="$PATH:/usr/local/go/bin"
 fi
+export PATH="$PATH:$HOME/go/bin"
 export GOPATH="$HOME/go"
 
 # cuda
@@ -283,4 +284,4 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 # }}
 
-source $HOME/.primary		# some primary environment variable
+source $HOME/.primary.sh		# some primary environment variable

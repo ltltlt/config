@@ -3,14 +3,14 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#rc()
 " alternatively, pass a path where Vundle should install plugins
 "let path = '~/some/path/here'
 "call vundle#rc(path)
 "
 " let Vundle manage Vundle, required
-Plugin 'gmarik/vundle'
+Plugin 'VundleVim/Vundle.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between here and filetype plugin indent on.
@@ -457,4 +457,9 @@ let g:snips_github='https://github.com/ltltlt'
 "{{ Go
 nmap <leader>gi :GoImports<cr>
 nmap <leader>gd :GoDoc<cr>
+"}}
+
+"{{ disable stupid sql completion
+let g:loaded_sql_completion = 0
+let g:omni_sql_no_default_maps = 1
 "}}

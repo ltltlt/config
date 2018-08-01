@@ -1,0 +1,15 @@
+{
+    "terminal.integrated.fontFamily": "Source Code Pro for Powerline",
+    "editor.fontFamily": "Source Code Pro for Powerline",
+    "workbench.colorTheme": "Monokai",
+    "editor.wordWrap": "on",
+    "vim.foldfix": true,
+    "vim.handleKeys": {
+        "<C-d>": true,
+        "<C-f>": false
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    }
+}
