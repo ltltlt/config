@@ -1,7 +1,6 @@
 {
-    "terminal.integrated.fontFamily": "Source Code Pro for Powerline",
-    "editor.fontFamily": "Source Code Pro for Powerline",
-    "workbench.colorTheme": "Monokai",
+    "terminal.integrated.fontFamily": "DejaVu Sans Mono for Powerline",
+    "editor.fontFamily": "DejaVu Sans Mono for Powerline",
     "editor.wordWrap": "on",
     "vim.foldfix": true,
     "vim.handleKeys": {
