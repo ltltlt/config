@@ -51,7 +51,7 @@ Plugin 'honza/vim-snippets'
 "
 "use for the nerdcommenter
 let mapleader=','		" change default leader key
-let s:kernel_release='Chrome'
+let s:kernel_release='Ubuntu'
 let s:username=$USER
 let s:email=$WORK_EMAIL
 let s:time_format='%F %a %R'
@@ -99,11 +99,7 @@ set showcmd         " 输入的命令显示出来，看的清楚些
 set cmdheight=1     " 命令行（在状态行下）的高度，设置为1  
 "set whichwrap+=<,>,h,l   " 允许backspace和光标键跨越行边界(不建议)  
 "set scrolloff=3     " 光标移动到buffer的顶部和底部时保持3行距离  
-set novisualbell    " 不要闪烁(不明白)  
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容  
-set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)  
-set foldenable      " 允许启动vim时折叠  
-set foldmethod=syntax   " 手动折叠  
+set novisualbell    " 不要闪烁
 set background=dark "背景使用黑色	"各种主题都有亮色和暗色，light和dark
 set guifont=DejaVu\ Sans\ Mono\ Book\ for\ Powline\ 11
 :hi Folded ctermbg=240
@@ -169,7 +165,6 @@ endfunc
 "键盘命令
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :nnoremap <Leader>w <C-w>	" because ctrl-w conflict with chrome shortcut
-nmap <leader>w :w!<cr>
 nmap <leader>f :find<cr>
 
 " 映射全选+复制 ctrl+a
@@ -177,7 +172,7 @@ map <C-A> ggVGY
 map! <C-A> <Esc>ggVGY
 map <F12> gg=G
 " 选中状态下 Ctrl+c 复制
-vmap <C-c> "+y
+vmap <C-c> "+y		" not work, don't know why
 "去空行
 nnoremap <F2> :g/^\s*$/d<CR> 
 "比较文件  
@@ -228,16 +223,19 @@ endfunc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 设置当文件被改动时自动载入
 set autoread
+
+"{{ c, cpp quickfix
+"make 运行
+:set makeprg=gcc\ -Wall\ \ %
 " quickfix模式
 autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
-"代码补全 
-set completeopt=preview,menu 
+"}}
+"
+
+"clipboard: install vim version have +clipboard
+
 "允许插件  
 filetype plugin on
-"共享剪贴板  
-set clipboard+=unnamedplus
-"make 运行
-:set makeprg=g++\ -Wall\ \ %
 "自动保存
 set autowrite
 set ruler                   " 打开状态栏标尺
@@ -247,7 +245,8 @@ set magic                   " 设置魔术(basic regular expression)
 set guioptions-=T           " 隐藏工具栏
 set guioptions-=m           " 隐藏菜单栏
 set foldcolumn=0
-set foldmethod=indent 
+set foldenable      " 允许启动vim时折叠  
+set foldmethod=syntax   " better than indent
 set foldlevel=3 
 " 不要使用vi的键盘模式，而是vim自己的
 " 去掉输入错误的提示声音
@@ -278,15 +277,13 @@ set noswapfile
 set hlsearch
 set incsearch
 "默认一行仅替换一个改为一行替换所有
-set gdefault
+"set gdefault
 "编码设置
 set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 "语言设置
 set langmenu=zh_CN.UTF-8
 set helplang=cn
-" 总是显示状态行
-set laststatus=2
 " 为特定文件类型载入相关缩进文件
 filetype indent on
 " 保存全局变量
@@ -302,9 +299,9 @@ set backspace=2
 " 允许backspace和光标键跨越行边界
 set whichwrap+=<,>,h,l
 " 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
-"set mouse=a
-"set selection=exclusive
-"set selectmode=mouse,key
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
 " 通过使用: commands命令，告诉我们文件的哪一行被改变过
 set report=0
 " 在被分割的窗口间显示空白，便于阅读
@@ -319,9 +316,7 @@ set scrolloff=3
 nmap <leader>p :set invpaste paste?<CR>
 "nnoremap <F3> :set invpaste paste?<CR>
 "imap <F3> <C-O>:set invpaste paste?<CR>
-set pastetoggle=<F3>
-" 高亮显示普通txt文件（需要txt.vim脚本）
-au BufRead,BufNewFile *  setfiletype txt
+"set pastetoggle=<F3>
 "打开文件类型检测, 加了这句才可以用智能补全
 set completeopt=longest,menu
 
