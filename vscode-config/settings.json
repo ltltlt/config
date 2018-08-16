@@ -1,4 +1,4 @@
-{
+
 	"terminal.integrated.fontFamily": "Source Code Pro for Powerline",
 	"editor.fontFamily": "DejaVu Sans Mono for Powerline",
 	"workbench.colorTheme": "One Dark Pro",
@@ -15,4 +15,8 @@
 		"suppressShowKeyBindingsNotice": true
 	},
 	"editor.multiCursorModifier": "ctrlCmd",
+    "workbench.statusBar.visible": true,
+    "workbench.activityBar.visible": true,
+    "window.menuBarVisibility": "toggle"
 }
+
