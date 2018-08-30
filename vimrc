@@ -47,11 +47,11 @@ Plugin 'fatih/vim-go'
 "模块补全
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-" ...
+
 "
 "use for the nerdcommenter
 let mapleader=','		" change default leader key
-let s:kernel_release='Ubuntu'
+let s:kernel_release='Arch'
 let s:username=$USER
 let s:email=$WORK_EMAIL
 let s:time_format='%F %a %R'
@@ -63,6 +63,12 @@ func! SaveInputData()
 	exec 'normal "+gP'
 	exec "w! /tmp/input_data"
 endfunc
+
+" 记录光标位置
+augroup resCur
+  autocmd!
+  autocmd BufReadPost * call setpos(".", getpos("'\""))
+augroup END
 
 
 "colorscheme torte
@@ -76,11 +82,9 @@ endfunc
 "colorscheme solarized
 colorscheme molokai
 
-"set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
-"set termencoding=utf-8
-"set encoding=utf-8
-"set fileencodings=ucs-bom,utf-8,cp936
-"set fileencoding=utf-8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936	"fileencodings
+set termencoding=utf-8
+set encoding=utf-8
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 显示相关  
@@ -280,10 +284,11 @@ set incsearch
 "set gdefault
 "编码设置
 set enc=utf-8
-set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+" file prefer encoding order
+set fencs=utf-8,ucs-bom,utf-16le,utf16-be,default,shift-jis,gb18030,gbk,gb2312,cp936
 "语言设置
-set langmenu=zh_CN.UTF-8
-set helplang=cn
+set langmenu=en_US.UTF-8
+set helplang=en
 " 为特定文件类型载入相关缩进文件
 filetype indent on
 " 保存全局变量
