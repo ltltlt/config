@@ -1,22 +1,2 @@
-
-	"terminal.integrated.fontFamily": "Source Code Pro for Powerline",
-	"editor.fontFamily": "DejaVu Sans Mono for Powerline",
-	"workbench.colorTheme": "One Dark Pro",
-	"editor.wordWrap": "on",
-	"vim.foldfix": true,
-	"vim.handleKeys": {
-		"<C-d>": false,
-		"<C-f>": false,
-		"<C-k>": false,
-		"<C-u>": false
-	},
-	"workbench.iconTheme": "vscode-icons",
-	"gitlens.advanced.messages": {
-		"suppressShowKeyBindingsNotice": true
-	},
-	"editor.multiCursorModifier": "ctrlCmd",
-    "workbench.statusBar.visible": true,
-    "workbench.activityBar.visible": true,
-    "window.menuBarVisibility": "toggle"
+{
 }
-
