@@ -4,6 +4,8 @@
 #	i3lock
 #	feh
 #	compton
+#	scrot
+#	xclip
 
 set $mod Mod4
 
@@ -126,6 +128,8 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Control+Left move container to workspace prev
+bindsym $mod+Control+Right move container to workspace next
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -165,11 +169,24 @@ new_window none
 new_float pixel 2
 
 # use feh to randomly set wallpaper
-exec --no-startup-id feh --randomize --bg-fill ~/Pictures/*
+#exec --no-startup-id feh --randomize --bg-fill ~/Pictures/wallpapers/*
+exec --no-startup-id ~/.local/bin/randfeh -d ~/Pictures/wallpapers
 
 # lock
-bindsym $mod+l exec i3lock -i $HOME/Pictures/picture3.png
+bindsym $mod+l exec i3lock -i $HOME/Pictures/wallpapers/picture6.png
+# screen shot
+bindsym --release $mod+p exec "scrot -s /tmp/scrot-image.png && xclip -selection clipboard -t image/png < /tmp/scrot-image.png"
 
 exec --no-startup-id compton
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id fcitx
+
+# assign window to specific workspace
+assign [class="(?i)^google-chrome$"] $ws1
+assign [class="(?i)^(code|jetbrains-idea-ce)$"] $ws2
+assign [class="(?i)^telegramdesktop$"] $ws3
+assign [class="(?i)^transmission"] $ws3
+assign [class="(?i)^steam$"] $ws4
+assign [class="(?i)^(et|wpp|wps)$"] $ws5	# wps
+
+# for_window [class="(?i)^gnome-terminal$"] floating enable
