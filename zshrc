@@ -186,6 +186,7 @@ hash -d P="$HOME/python"
 hash -d H="$HOME/html"
 hash -d S="$HOME/shell"
 hash -d G="$HOME/go"
+hash -d JS="$HOME/javascript"
 # }}
 
 
@@ -282,6 +283,7 @@ fi
 
 # local
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
 # }}
 
 source $HOME/.primary.sh		# some primary environment variable
