@@ -1,0 +1,59 @@
+// 将按键绑定配置放入此文件中即可覆盖默认值
+[
+    {
+        "key": "f12",
+        "command": "editor.action.goToDeclaration",
+        "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+    },
+    {
+        "key": "f12",
+        "command": "-editor.action.goToDeclaration",
+        "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+    },
+    {
+        "key": "ctrl+k z",
+        "command": "workbench.action.toggleZenMode"
+    },
+    {
+        "key": "ctrl+k z",
+        "command": "-workbench.action.toggleZenMode"
+    },
+    {
+        "key": "ctrl+k ctrl+r",
+        "command": "workbench.action.openRecent"
+    },
+    {
+        "key": "ctrl+r",
+        "command": "-workbench.action.openRecent"
+    },
+    {
+        "key": "ctrl+x -",
+        "command": "workbench.action.splitEditorDown"
+    },
+    {
+        "key": "ctrl+k q",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    {
+        "key": "ctrl+alt+w",
+        "command": "workbench.action.closeWindow",
+        "when": "!editorIsOpen && !multipleEditorGroups"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "-workbench.action.closeWindow",
+        "when": "!editorIsOpen && !multipleEditorGroups"
+    },
+    {
+        "key": "ctrl+x shift+\\",
+        "command": "workbench.action.splitEditorRight"
+    },
+    {
+        "key": "ctrl+x r",
+        "command": "workbench.action.evenEditorWidths"
+    },
+    {
+        "key": "ctrl+x z",
+        "command": "workbench.action.minimizeOtherEditors"
+    }
+]
