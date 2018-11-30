@@ -187,6 +187,7 @@ hash -d H="$HOME/html"
 hash -d S="$HOME/shell"
 hash -d G="$HOME/go"
 hash -d JS="$HOME/javascript"
+hash -d J="$HOME/jvm"
 # }}
 
 
@@ -285,5 +286,16 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/scripts:$PATH"
 # }}
+
+# spark
+export PYSPARK_DRIVER_PYTHON=ipython
+export SPARK_HOME=/usr/local/spark
+
+# java
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+
+# rust
+export PATH="$HOME/.cargo/bin:$PATH"
 
 source $HOME/.primary.sh		# some primary environment variable

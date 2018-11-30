@@ -32,5 +32,7 @@
     "files.associations": {
         "docker_build": "shellscript",
         "*.jsx": "javascript"
-    }
+    },
+	"window.menuBarVisibility": "toggle",
+	"window.zoomLevel": 0
 }
