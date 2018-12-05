@@ -43,6 +43,7 @@ Bundle 'https://github.com/terryma/vim-multiple-cursors'
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'fatih/vim-go'
+Plugin 'rust-lang/rust.vim'
 
 "模块补全
 Plugin 'SirVer/ultisnips'
@@ -207,6 +208,9 @@ func! Run()
 		exec "!sbcl < %"
 	elseif &filetype is 'go'
 		exec "GoRun %"
+	elseif &filetype is 'rust'
+		exec "!rustc %"
+		exec "! ./%<"
 	endif
 endfunc
 map <F10> :call Rungdb()<CR>
@@ -355,7 +359,7 @@ map <F7> :NERDTree<CR>
 """""""""""""""""""""""""""""""""""""""
 "            YouCompleteMe            "
 """""""""""""""""""""""""""""""""""""""
-let g:ycm_global_ycm_extra_conf=$HOME.'/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf=$HOME.'/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf=1    "打开vim时不再询问是否加载ycm_extra_conf.py配置
 let g:ycm_collect_identifiers_from_tag_files = 0 "使用ctags生成的tags文件"
 let g:ycm_error_symbol='>>'  "错误标志
@@ -453,6 +457,12 @@ let g:airline_section_c = ''	" unset filename below(because it already have abov
 let g:snips_author=$USER
 let g:snips_email=$WORK_EMAIL
 let g:snips_github='https://github.com/ltltlt'
+
+"""""""""""""""""""""""""""""""""""""""
+"			   rust.vim				  "
+"""""""""""""""""""""""""""""""""""""""
+let g:rustfmt_autosave = 1
+let g:rust_clip_command = 'xclip -selection clipboard'
 
 "{{ Go
 nmap <leader>gi :GoImports<cr>
