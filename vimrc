@@ -71,21 +71,8 @@ augroup resCur
   autocmd BufReadPost * call setpos(".", getpos("'\""))
 augroup END
 
-
-"colorscheme torte
-"colorscheme murphy
-"colorscheme desert  
-"colorscheme elflord
-"colorscheme ron
-
-"colorscheme github
-"colorscheme eclipse
-"colorscheme solarized
 colorscheme molokai
 
-set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936	"fileencodings
-set termencoding=utf-8
-set encoding=utf-8
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 显示相关  
@@ -288,6 +275,7 @@ set incsearch
 "set gdefault
 "编码设置
 set enc=utf-8
+set termencoding=utf-8
 " file prefer encoding order
 set fencs=utf-8,ucs-bom,utf-16le,utf16-be,default,shift-jis,gb18030,gbk,gb2312,cp936
 "语言设置
@@ -328,6 +316,12 @@ nmap <leader>p :set invpaste paste?<CR>
 "set pastetoggle=<F3>
 "打开文件类型检测, 加了这句才可以用智能补全
 set completeopt=longest,menu
+
+" undo
+set undodir=$HOME/.vim/undo
+set undofile
+set undolevels=1000
+set undoreload=10000
 
 """""""""""""""""""""""""""""""""""""""
 "              UltiSnips              "
