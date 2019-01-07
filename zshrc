@@ -54,19 +54,17 @@ plugins=(
 	command-not-found
 	docker
 	autojump
-	sudo
 )
 
-ZSH_THEME=lty			# i define it by myself
+ZSH_THEME=lty			# custom theme
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-if [[ -n MANPATH ]]; then
-	export MANPATH="/usr/local/man:$MANPATH"
-else
-	export MANPATH="/usr/local/man"
-fi
+manpath=(
+	$manpath
+	/usr/local/man
+)
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -93,8 +91,6 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias grep='grep --color=auto'
 alias tmux='tmux -2'
-alias pingbaidu='ping www.baidu.com'
-alias pinggoogle='ping www.google.com'
 alias mount='mount -o uid=1000'
 alias psall='ps xao pid,ppid,pgid,sid,command'
 alias valgrind='valgrind --leak-check=full --show-leak-kinds=all'
@@ -168,13 +164,13 @@ zstyle ':completion:*:processes' command 'ps -au$USER'
 function user-complete(){
 	case $BUFFER in
 	"" )                       # 空行填入 "cd "
-	BUFFER="cd "
-	zle end-of-line
-	zle expand-or-complete
-	;;
+		BUFFER="cd "
+		zle end-of-line
+		zle expand-or-complete
+		;;
 	* )
-	zle expand-or-complete
-	;;
+		zle expand-or-complete
+		;;
 	esac
 }
 zle -N user-complete
@@ -185,7 +181,6 @@ bindkey "\t" user-complete
 autoload run-help
 
 # 路径别名 {{
-hash -d E="/etc/"
 hash -d C="$HOME/CLanguage"
 hash -d CPP="$HOME/C++"
 hash -d L="$HOME/lisp"
@@ -194,12 +189,13 @@ hash -d H="$HOME/html"
 hash -d S="$HOME/shell"
 hash -d G="$HOME/go"
 hash -d JS="$HOME/javascript"
+hash -d R="$HOME/rust"
 hash -d J="$HOME/jvm"
 # }}
 
 
 # 补全ping {{
-zstyle ':completion:*:ping:*' hosts www.google.com {www.,}szu.edu.cn www.baidu.com
+zstyle ':completion:*:ping:*' hosts www.google.com www.baidu.com
 # }}
 
 
@@ -256,6 +252,12 @@ setopt bang_hist                # !keyword
 bindkey '^R' history-incremental-search-backward
 # }}
 
+hosts=(www.google.com github.com)
+
+# The compctl command is used to control how completion works.
+# http://zsh.sourceforge.net/Intro/intro_10.html
+compctl -c man nohup
+compctl -h ssh telnet ping	# host
 
 # 在命令前插入sudo {{
 function sudo-command-line() {
@@ -263,7 +265,7 @@ function sudo-command-line() {
 	[[ $BUFFER != sudo\ *  ]] && BUFFER="sudo $BUFFER"
 	zle end-of-line #光标移动到行末
 }
-zle -N sudo-command-line		# new zsh widget
+zle -N sudo-command-line		# new zsh widget(zle -N widget_name func_name)
 bindkey "\e\e" sudo-command-line	# shortcut ESC ESC
 # }}
 
@@ -294,7 +296,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/scripts:$PATH"
 # }}
 
-# spark
+# spark use ipython instead of python
 export PYSPARK_DRIVER_PYTHON=ipython
 export SPARK_HOME=/usr/local/spark
 
