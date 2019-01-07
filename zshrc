@@ -48,7 +48,14 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions command-not-found)
+plugins=(
+	git
+	zsh-autosuggestions
+	command-not-found
+	docker
+	autojump
+	sudo
+)
 
 ZSH_THEME=lty			# i define it by myself
 source $ZSH/oh-my-zsh.sh
@@ -235,8 +242,8 @@ zle -N backward-delete-char check-cmd-backward-delete-char
 
 # history {{
 HISTFILE=~/.zsh_history         # where to store zsh config
-HISTSIZE=1024                   # big history
-SAVEHIST=1024                   # big history
+HISTSIZE=2048                   # big history
+SAVEHIST=2048                   # big history
 setopt append_history           # append
 setopt hist_ignore_all_dups     # no duplicate
 unsetopt hist_ignore_space      # ignore space prefixed commands
@@ -298,4 +305,19 @@ export PATH=$PATH:$JAVA_HOME/bin
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
+function extract_file () {
+	sed -n -r 's;.*"file":\s*"([^"]+)".*;\1;p';
+}
+
+# copy from https://stackoverflow.com/questions/10622179/how-to-find-identify-large-files-commits-in-git-history
+function git_show_large_object () {
+git rev-list --objects --all \
+	| git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
+	| sed -n 's/^blob //p' \
+	| sort --numeric-sort --key=2 \
+	| cut -c 1-12,41- \
+	| $(command -v gnumfmt || echo numfmt) --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest
+}
+
+. /usr/share/autojump/autojump.sh
 source $HOME/.primary.sh		# some primary environment variable
