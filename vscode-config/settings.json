@@ -26,9 +26,6 @@
         "**/node_modules/**": true,
         "**/.idea/**": true
     },
-    "go.inferGopath": true,
-    "go.gopath": "~/go",
-    "go.useCodeSnippetsOnFunctionSuggest": true,
     "files.associations": {
         "docker_build": "shellscript",
         "*.jsx": "javascript"
@@ -37,11 +34,15 @@
 	"window.zoomLevel": 0,
 	"window.titleBarStyle": "native",
 	"editor.lineNumbers": "relative",
+    "go.inferGopath": true,
+    "go.gopath": "~/go",
+    "go.useCodeSnippetsOnFunctionSuggest": true,
 	"go.formatTool": "goimports",
 	"go.lintTool": "gometalinter",
 	"go.lintFlags": [
 		"--enable-gc",
 		"--disable=gocyclo",
 		"--exclude=.*\\.pb\\.go"
-	]
+	],
+    "go.docsTool": "gogetdoc"
 }
