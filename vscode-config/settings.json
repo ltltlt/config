@@ -34,5 +34,14 @@
         "*.jsx": "javascript"
     },
 	"window.menuBarVisibility": "toggle",
-	"window.zoomLevel": 0
+	"window.zoomLevel": 0,
+	"window.titleBarStyle": "native",
+	"editor.lineNumbers": "relative",
+	"go.formatTool": "goimports",
+	"go.lintTool": "gometalinter",
+	"go.lintFlags": [
+		"--enable-gc",
+		"--disable=gocyclo",
+		"--exclude=.*\\.pb\\.go"
+	]
 }
