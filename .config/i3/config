@@ -27,6 +27,8 @@ font pango:monospace 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+focus_follows_mouse yes
+
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
@@ -36,7 +38,7 @@ bindsym $mod+Shift+q kill
 # start rofi desktop application (a program launcher)
 bindsym $mod+d exec rofi -show drun -modi drun
 # start rofi window (window switcher)
-bindsym $mod+w exec rofi -show window
+bindsym $mod+w exec "rofi -combi-modi window,drun,ssh -show combi -modi combi"
 # start exec program
 bindsym $mod+Shift+d exec rofi -show run
 
@@ -53,10 +55,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
- bindsym $mod+Shift+h move left
- bindsym $mod+Shift+j move down
- bindsym $mod+Shift+k move up
- bindsym $mod+Shift+l move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -65,7 +67,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-#bindsym $mod+h split h
+# bindsym $mod+h split h
 # split horizontal console
 bindsym $mod+Shift+backslash split h; exec i3-sensible-terminal
 
@@ -184,7 +186,9 @@ exec_always --no-startup-id fcitx
 
 # assign window to specific workspace
 assign [class="(?i)^google-chrome$"] $ws1
-assign [class="(?i)^(code|jetbrains-idea-ce)$"] $ws2
+assign [class="(?i)^firefox"] $ws1
+assign [class="(?i)^code$"] $ws2
+assign [class="(?i)jetbrains-idea"] $ws2
 assign [class="(?i)^telegramdesktop$"] $ws3
 assign [class="(?i)^transmission"] $ws3
 assign [class="(?i)^steam$"] $ws4

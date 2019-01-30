@@ -1,7 +1,6 @@
 rofi.theme: /usr/share/rofi/themes/Arc-Dark.rasi
 rofi.blur-background: true
 rofi.location:		  0
-rofi.terminal:		  alacritty
 rofi.lines:			  20
 rofi.eh:			  1
 rofi.font:      	  Monaco 12
