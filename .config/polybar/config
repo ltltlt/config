@@ -70,7 +70,7 @@ font-4 = ${fonts.font-4}
 
 modules-left = user lsp i3 lpd wifi eth ldl title
 modules-center = 
-modules-right = rld memory rsd cpu rsd temperature rsd volume rdp date rsp time
+modules-right = rld memory rsd cpu rsd temperature rsd filesystem rdp date rsp time
 
 ;=====================================================
 ;   section/base_left_primary
@@ -259,6 +259,8 @@ format-paused-foreground = ${colors.material-foreground}
 format-paused-background = ${colors.material-dark-background}
 format-stopped-foreground = ${colors.material-foreground}
 format-stopped-background = ${colors.material-dark-background}
+format-mounted-foreground = ${colors.material-foreground}
+format-mounted-background = ${colors.material-dark-background}
 
 format-padding = ${variables.label-padding}
 format-connected-padding = ${variables.label-padding}
@@ -529,7 +531,7 @@ type = internal/memory
 inherit = section/base_right_dark
 interval = 1
 
-label = %{T5}%{T-} %percentage_used:3%%
+label = %{T5}%{T-} %percentage_used%%(%mb_total%)
 
 ;=====================================================
 ;   module/wifi
@@ -618,6 +620,19 @@ warn-temperature = 70
 
 label = %{T5}%{T-} %temperature-c:3%
 label-warn = %{T5}%{T-} %temperature-c:3%
+
+;=====================================================
+;   module/filesystem
+;=====================================================
+[module/filesystem]
+type = internal/fs
+inherit = section/base_right_dark
+mount-0 = /home
+interval = 30
+fixed-values = true
+spacing = 4
+format-mounted = <label-mounted>
+label-mounted = " %fsname%@%mountpoint% %percentage_used%%(%total%) "
 
 ;=====================================================
 ;   settings
