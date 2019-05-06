@@ -52,7 +52,7 @@ Plugin 'honza/vim-snippets'
 "
 "use for the nerdcommenter
 let mapleader=','		" change default leader key
-let s:kernel_release='Arch'
+let s:kernel_release=system("echo -n `head -n 1 /etc/issue | awk -c '{print(\\$1)}'`")
 let s:username=$USER
 let s:email=$WORK_EMAIL
 let s:time_format='%F %a %R'
