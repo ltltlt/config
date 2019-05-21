@@ -322,4 +322,4 @@ git rev-list --objects --all \
 }
 
 . /usr/share/autojump/autojump.sh
-source $HOME/.primary.sh		# some primary environment variable
+source $HOME/.private.sh		# some private environment variable
