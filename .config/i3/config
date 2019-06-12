@@ -4,7 +4,7 @@
 #	i3lock
 #	feh
 #	compton
-#	scrot
+#	deepin-screenshot
 #	xclip
 
 set $mod Mod4
@@ -178,7 +178,7 @@ exec --no-startup-id feh --randomize --bg-fill ~/Pictures/wallpapers/*
 # lock
 bindsym $mod+l exec i3lock -i $HOME/Pictures/wallpapers/picture6.png
 # screen shot
-bindsym --release $mod+p exec "scrot -s /tmp/scrot-image.png && xclip -selection clipboard -t image/png < /tmp/scrot-image.png"
+bindsym --release $mod+p exec "deepin-screenshot -s /tmp/screenshot.png && xclip -selection clipboard -t image/png < /tmp/screenshot.png"
 
 exec --no-startup-id compton
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
