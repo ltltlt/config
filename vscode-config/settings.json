@@ -1,6 +1,6 @@
 {
 	"terminal.integrated.fontFamily": "Source Code Pro for Powerline",
-	"editor.fontFamily": "'Monaco'",
+	"editor.fontFamily": "Monaco",
 	"editor.fontLigatures": true,
 	"editor.fontWeight": "400", // Regular
 	"workbench.colorTheme": "Solarized Dark",
@@ -21,7 +21,8 @@
 		"**/.git/objects/**": true,
 		"**/.git/subtree-cache/**": true,
 		"**/node_modules/**": true,
-		"**/.idea/**": true
+		"**/.idea/**": true,
+		"**/*.o": true
 	},
 	"files.associations": {
 		"docker_build": "shellscript",
@@ -44,6 +45,22 @@
 	],
 	"C_Cpp.default.cStandard": "c11",
 	"C_Cpp.default.intelliSenseMode": "gcc-x64",
-	"go.lintTool": "golangci-lint",
-	"go.docsTool": "gogetdoc"
+	"git.autofetch": true,
+
+	"go.useLanguageServer": true,
+	"go.languageServerExperimentalFeatures": {
+		"diagnostics": true
+	},
+	"[go]": {
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true
+		}
+	},
+	"gopls": {
+		"usePlaceholders": true, // add parameter placeholders when completing a function
+		"enhancedHover": true, // experimental to improve quality of hover (will be on by default soon)
+	},
+	"editor.links": false,
+	"bookmarks.saveBookmarksInProject": true
 }
